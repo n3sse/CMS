@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+    {{ title_page }}
+{% endblock %}
+
+{% block body_block %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 col-md-offset2">
+                {% if posts %}
+                    {% for post in posts %}
+
+                        <div class="postTitle">
+                            <h3>{{ post.title }}</h3>
+                        </div>
+
+                        <div class="postDate">
+                            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            <small> {{ post.published_date|date:"M d, Y " }}</small>
+                        <hr>
+                        </div>
+
+                        <div class="postContent">
+                        {% if post.content_length <= 700 %}
+                            <p>{{ post.content }}</p>
+                        {% else %}
+                            <p>{{ post.content|slice:"0:700"|linebreaksbr }}..</p>
+                        {% endif %}
+
+                        </div>
+                        <a href="{% url 'detail_view' pk=post.pk %}">Read more</a>
+                        <hr>
+                        <div class="postTags">
+                            <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                            <small> {{ post.tags }}</small>
+                            <div class="postAuthor">
+                                <p>posted by {{ post.author }} </p>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                {% else %}
+                    <h1>There is no posts.</h1>
+                {% endif %}
+                <a href="{% url 'all_post_view' page=1 %}"> Show more </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

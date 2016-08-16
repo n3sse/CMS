@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 col-md-offset2">
+                {% if posts %}
+                    {% for post in posts %}
+
+                        <div class="postTitle">
+                            <h3>{{ post.title }}</h3>
+                        </div>
+
+                        <div class="postDate">
+                            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            <small> {{ post.published_date|date:"M d, Y " }}</small>
+                        </div>
+
+                        <div class="postContent">
+                            {% if post.post_length <= 700 %}
+                                <p>{{ post.content }}</p>
+                            {% else %}
+                                <p>{{ post.content|slice:"0:700"|linebreaksbr }}..</p>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'detail_view' pk=post.pk %}">Read more</a>
+                        <div class="postTags">
+                            <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                            <small> {{ post.tags }}</small>
+                            <div class="postAuthor">
+                                <p>posted by {{ post.author }} </p>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                {% else %}
+                    <h1>There is no posts.</h1>
+                {% endif %}
+
+                {% if is_paginated %}
+
+                    <div class="pagination">
+                 <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="{% url 'all_post_view' page=page_obj.previous_page_number %}"> Previous page - </a>
+                    {% endif %}
+
+                     <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                     </span>
+
+                     {% if page_obj.has_next %}
+                         <a href="{% url 'all_post_view' page=page_obj.next_page_number  %}"> - Next page </a>
+                     {% endif %}
+                </span>
+                    </div>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
